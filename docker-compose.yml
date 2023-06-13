@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=lalala
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./movies.sql:/docker-entrypoint-initdb.d/movies.sql
+    ports:
+      - 3306:3306
+    networks:
+      - mynetwork
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    networks:
+      - mynetwork
+
+volumes:
+  db_data:
+
+networks:
+  mynetwork:
