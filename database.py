@@ -2,12 +2,12 @@ import mysql.connector
 import time
 
 # Wait for MySQL container to start up
-time.sleep(60)  # Adjust the delay as needed
+time.sleep(5)  # Adjust the delay as needed
 # Database connection configuration
 db_config = {
     "host": "movie-db",
     "port": 3306,
-    "user": "db",
+    "user": "root",
     "password": "123",
     "database": "lalala",
 }
