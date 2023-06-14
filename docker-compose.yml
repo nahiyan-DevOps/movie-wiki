@@ -57,7 +57,7 @@ services:
       - ./prometheus:/etc/prometheus
       - prometheus_data:/prometheus/data
     command:
-      - '--config.file=./prometheus/prometheus.yml'
+      - '--config.file=/etc/prometheus/prometheus.yml'
     networks:
       - mynetwork
 
@@ -86,7 +86,6 @@ volumes:
   db_logs:
   app_data:   # Declare volume for app's data
   prometheus_data:   # Declare volume for Prometheus data
-  grafana_data:   # Declare volume for Grafana data
 
 networks:
   mynetwork:
