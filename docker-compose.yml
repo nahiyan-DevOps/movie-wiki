@@ -33,7 +33,7 @@ services:
     restart: always
     volumes:
       - ./app:/app
-      - app_data:/app/data   # Add volume for app's data
+      - app_data:/app   # Add volume for app's data
     ports:
       - 8000:8000
     depends_on:
@@ -58,15 +58,6 @@ services:
       - prometheus_data:/prometheus/data
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-    networks:
-      - mynetwork
-
-  node-exporter:
-    image: prom/node-exporter
-    container_name: node-exporter
-    restart: always
-    ports:
-      - 9100:9100
     networks:
       - mynetwork
 
