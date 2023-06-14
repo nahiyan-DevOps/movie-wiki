@@ -46,6 +46,7 @@ services:
       timeout: 5s
       retries: 3
 
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -54,19 +55,29 @@ services:
       - 9090:9090
     volumes:
       - ./prometheus:/etc/prometheus
-      - prometheus_data:/prometheus/data   # Add volume for Prometheus data
+      - prometheus_data:/prometheus/data
+    command:
+      - '--config.file=./prometheus.yml'
     networks:
       - mynetwork
 
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
+  node-exporter:
+    image: prom/node-exporter
+    container_name: node-exporter
     restart: always
     ports:
-      - 3000:3000
-    volumes:
-      - ./grafana:/var/lib/grafana
-      - grafana_data:/var/lib/grafana   # Add volume for Grafana data
+      - 9100:9100
+    networks:
+      - mynetwork
+
+  mysqld-exporter:
+    image: prom/mysqld-exporter
+    container_name: mysqld-exporter
+    restart: always
+    environment:
+      - DATA_SOURCE_NAME=root:123@(movie-db:3306)/lalala
+    ports:
+      - 9104:9104
     networks:
       - mynetwork
 
