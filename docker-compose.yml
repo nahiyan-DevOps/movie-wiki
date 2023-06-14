@@ -13,14 +13,13 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./movies.sql:/docker-entrypoint-initdb.d/movies.sql
-      - db_logs:/var/log/mysql
     ports:
       - 3306:3306
     networks:
       - mynetwork
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 15s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 13s
       timeout: 5s
       retries: 3
 
@@ -31,9 +30,6 @@ services:
     image: nahiyan83bjit/movie-wiki:stable
     container_name: movie-app
     restart: always
-    volumes:
-      - ./app:/app
-      - app_data:/app   # Add volume for app's data
     ports:
       - 8000:8000
     depends_on:
@@ -41,42 +37,13 @@ services:
     networks:
       - mynetwork
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
       interval: 10s
       timeout: 5s
       retries: 3
 
-
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    restart: always
-    ports:
-      - 9090:9090
-    volumes:
-      - ./prometheus:/etc/prometheus
-      - prometheus_data:/prometheus/data
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-    networks:
-      - mynetwork
-
-  mysqld-exporter:
-    image: prom/mysqld-exporter
-    container_name: mysqld-exporter
-    restart: always
-    environment:
-      - DATA_SOURCE_NAME=root:123@(movie-db:3306)/lalala
-    ports:
-      - 9104:9104
-    networks:
-      - mynetwork
-
 volumes:
   db_data:
-  db_logs:
-  app_data:   # Declare volume for app's data
-  prometheus_data:   # Declare volume for Prometheus data
 
 networks:
   mynetwork:
