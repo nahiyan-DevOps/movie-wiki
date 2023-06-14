@@ -21,6 +21,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: nahiyan83bjit/movie-wiki:stable
     container_name: movie-app
     restart: always
     ports:
