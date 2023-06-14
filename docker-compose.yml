@@ -1,4 +1,5 @@
 version: "3.8"
+
 services:
   db:
     image: mysql:latest
@@ -12,10 +13,16 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./movies.sql:/docker-entrypoint-initdb.d/movies.sql
+      - ./db_logs:/var/log/mysql
     ports:
       - 3306:3306
     networks:
       - mynetwork
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   app:
     build:
@@ -24,15 +31,51 @@ services:
     image: nahiyan83bjit/movie-wiki:stable
     container_name: movie-app
     restart: always
+    volumes:
+      - ./app:/app
+      - app_data:/app/data   # Add volume for app's data
     ports:
       - 8000:8000
     depends_on:
       - db
     networks:
       - mynetwork
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    restart: always
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus/data   # Add volume for Prometheus data
+    networks:
+      - mynetwork
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - grafana_data:/var/lib/grafana   # Add volume for Grafana data
+    networks:
+      - mynetwork
 
 volumes:
   db_data:
+  db_logs:
+  app_data:   # Declare volume for app's data
+  prometheus_data:   # Declare volume for Prometheus data
+  grafana_data:   # Declare volume for Grafana data
 
 networks:
   mynetwork:
