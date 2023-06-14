@@ -13,7 +13,7 @@ services:
     volumes:
       - db_data:/var/lib/mysql
       - ./movies.sql:/docker-entrypoint-initdb.d/movies.sql
-      - ./db_logs:/var/log/mysql
+      - db_logs:/var/log/mysql
     ports:
       - 3306:3306
     networks:
@@ -57,7 +57,7 @@ services:
       - ./prometheus:/etc/prometheus
       - prometheus_data:/prometheus/data
     command:
-      - '--config.file=./prometheus.yml'
+      - '--config.file=./prometheus/prometheus.yml'
     networks:
       - mynetwork
 
