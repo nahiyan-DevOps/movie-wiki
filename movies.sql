@@ -1,11 +1,11 @@
 -- Create database if it doesn't exist
-CREATE DATABASE IF NOT EXISTS lalala;
+CREATE DATABASE IF NOT EXISTS movieDB;
 
 -- Switch to the database
 USE lalala;
 
 -- Create table if it doesn't exist
-CREATE TABLE IF NOT EXISTS hahaha (
+CREATE TABLE IF NOT EXISTS hollywood (
     movie_name VARCHAR(255),
     year_of_release INT,
     box_office DECIMAL(10,2),
