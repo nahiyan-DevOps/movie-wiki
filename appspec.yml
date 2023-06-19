@@ -4,3 +4,12 @@ files:
   - source: /
     destination: /home/ubuntu
 file_exists_behavior: OVERWRITE
+hooks:
+  BeforeInstall:
+    - location: shells/install.sh
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: shells/run.sh
+      timeout: 300
+      runas: root
